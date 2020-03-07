@@ -9,7 +9,15 @@ This package makes React Hooks (namely, `useEffect()` and `useLayoutEffect()`) w
 Installation
 ====
 
-Just install this package and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
+Just install this package with
+
+```
+npm install --save-dev jest-react-hooks-shallow
+# or
+yarn add --dev jest-react-hooks-shallow
+```
+
+ and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
 
 ``` 
 import enableHooks from 'jest-react-hooks-shallow;
