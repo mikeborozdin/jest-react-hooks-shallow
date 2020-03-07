@@ -4,12 +4,20 @@ jest-react-hooks-shallow
 Short Story
 ====
 
-This package makes React Hooks (namely, `useEffect()`) work with shallow rendering. In other words, you can use enzyme. Yay! 
+This package makes React Hooks (namely, `useEffect()` and `useLayoutEffect()`) work with shallow rendering. In other words, you can use enzyme. Yay! 
 
 Installation
 ====
 
-Just install this package and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
+Just install this package with
+
+```
+npm install --save-dev jest-react-hooks-shallow
+# or
+yarn add --dev jest-react-hooks-shallow
+```
+
+ and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
 
 ``` 
 import enableHooks from 'jest-react-hooks-shallow;
@@ -18,7 +26,7 @@ import enableHooks from 'jest-react-hooks-shallow;
 enableHooks(jest);
 ```
 
-And voilà - `useEffect()` will work with shallow rendering. From this moment on your test don't need to know anything about `useEffect()`. After all, it's a mere implementation detail.
+And voilà - `useEffect()` and `useLayoutEffect()` will work with shallow rendering. From this moment on your test don't need to know anything about `useEffect()`. After all, it's a mere implementation detail.
 
 Testing
 ====
@@ -105,10 +113,10 @@ Hooks Support Status
 ====
 |Hook|Support|
 |-----|------|
-|`useEffect`|Supported|
-|`useLayoutEffect`|Coming soon|
+|`useEffect`|✅|
+|`useLayoutEffect`|✅|
 |`useImperativeHandle`|Coming soon|
-|`useDebugValue`|Coming soon|
+|`useDebugValue`|No support plans|
 
 All other hooks (e.g. `useState()`, `useReducer()`) already work with shallow rendering.
 
@@ -121,7 +129,7 @@ Context
 
 In case, you wonder why I have created this package instead of extending enzyme, here's a slightly longer story.
 
-Actually, it's not enzyme's fault that `useEffect()` doesn't work in shallow rendering. In fact, enzyme does **not** actually performs shallow rendering. Its `shallow()` function merely invokes shallow rendering of `react-test-renderer`. 
+Actually, it's not enzyme's per se fault that `useEffect()` doesn't work in shallow rendering. It relies on `react-test-renderer` for some aspects of shallow rendering. And it is `react-test-renderer` that implements certain hooks, like `useState()` and does not implement the other ones (e.g. `useEffect()`).
 
 Now, `react-test-renderer` is part of the React library. And there is a [PR](https://github.com/facebook/react/pull/16168) that brings `useEffect()` to shallow rendering. However, that PR has been closed by Facebook. 
 

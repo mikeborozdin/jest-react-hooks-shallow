@@ -10,7 +10,8 @@ const enableHooks = (jestInstance: Jest): void => {
 
   jestInstance.mock('react', () => ({
     ...react,
-    useEffect: mockUseEffect()
+    useEffect: mockUseEffect(),
+    useLayoutEffect: mockUseEffect(),
   }));
 };
 
