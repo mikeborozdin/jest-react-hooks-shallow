@@ -19,7 +19,7 @@ yarn add --dev jest-react-hooks-shallow
 
  and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
 
-``` 
+```js 
 import enableHooks from 'jest-react-hooks-shallow;
 
 // pass an instance of jest to `enableHooks()`
@@ -33,7 +33,7 @@ Testing
 
 So if you have a component like this:
 
-```
+```js
 const ComponentWithHooks = () => {
   const [text, setText] = useState<>();
   const [buttonClicked, setButtonClicked] = useState<boolean>(false);
@@ -54,7 +54,7 @@ const ComponentWithHooks = () => {
 
 You can easily test it with code like this:
 
-```
+```js
 test('Renders default message and updates it on clicking a button', () => {
   const component = shallow(<App />);
 
@@ -74,7 +74,7 @@ No problems! You can easily test it with simple Jest mocks.
 
 Say, we have a component like this:
 
-```
+```js
 import someAction from './some-action';
 
 const ComponentWithHooks = () => {
@@ -92,7 +92,7 @@ const ComponentWithHooks = () => {
 };
 ```
 
-```
+```js
 test('Calls `myAction()` on the first render and on clicking the button`', () => {
   const component = shallow(<App />);
   expect(callback).toHaveBeenCalledTimes(1);
