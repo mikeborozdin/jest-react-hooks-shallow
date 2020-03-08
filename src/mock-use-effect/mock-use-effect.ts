@@ -1,5 +1,6 @@
 type UseEffectSignature = (fn: () => void, triggers?: unknown[]) => void;
 type FunctionBody = string;
+type CleanupFunction = () => void;
 
 const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies: unknown[]): boolean => {
   return previousDependencies === undefined ||
@@ -8,18 +9,25 @@ const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies:
 
 const mockUseEffect = (): UseEffectSignature => {
   const previousCalls = new Map<FunctionBody, unknown[]>();
+  const cleanupFunctions: CleanupFunction[] = [];
 
-  return (fn: () => void, dependencies?: unknown[]): void => {
-    const fnBody = fn.toString();
+  return (effect: () => CleanupFunction | void, dependencies?: unknown[]): void => {
+    const effectBody = effect.toString();
 
-    const shouldCall = previousCalls.has(fnBody) ?
-      noDepsOrDifferent(previousCalls.get(fnBody), dependencies) :
+    const shouldCall = previousCalls.has(effectBody) ?
+      noDepsOrDifferent(previousCalls.get(effectBody), dependencies) :
       true;
 
     if (shouldCall) {
-      previousCalls.set(fnBody, dependencies);
+      previousCalls.set(effectBody, dependencies);
 
-      fn();
+      cleanupFunctions.forEach(cleanupFunction => cleanupFunction());
+
+      const cleanupFunction = effect();
+
+      if (typeof cleanupFunction === 'function') {
+        cleanupFunctions.push(cleanupFunction);
+      }
     }
   }
 };
