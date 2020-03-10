@@ -20,7 +20,7 @@ yarn add --dev jest-react-hooks-shallow
  and add these lines to your Jest setup file (specified by `setupFilesAfterEnv`):
 
 ```js 
-import enableHooks from 'jest-react-hooks-shallow;
+import enableHooks from 'jest-react-hooks-shallow';
 
 // pass an instance of jest to `enableHooks()`
 enableHooks(jest);
