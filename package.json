@@ -10,7 +10,9 @@
   "main": "lib/enable-hooks.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test:unit": "jest",
+    "test:e2e": "cd sample-tests-and-e2e-tests && npm i && npm test && cd ..",
+    "test": "npm run test:unit && npm run test:e2e",
     "lint": "eslint ./src/**/*.ts"
   },
   "author": "Mike Borozdin <mike.borozdin@gmail.com>",

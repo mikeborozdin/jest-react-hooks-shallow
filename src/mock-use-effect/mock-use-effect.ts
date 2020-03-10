@@ -9,7 +9,14 @@ const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies:
 
 const mockUseEffect = (): UseEffectSignature => {
   const previousCalls = new Map<FunctionBody, unknown[]>();
-  const cleanupFunctions: CleanupFunction[] = [];
+  // let cleanupFunctions: CleanupFunction[] = [];
+  const cleanupFunctions = new Map<string, CleanupFunction>();
+
+  beforeEach(() => {
+    previousCalls.clear();
+    // cleanupFunctions = [];
+    cleanupFunctions.clear();
+  });
 
   return (effect: () => CleanupFunction | void, dependencies?: unknown[]): void => {
     const effectBody = effect.toString();
@@ -21,12 +28,14 @@ const mockUseEffect = (): UseEffectSignature => {
     if (shouldCall) {
       previousCalls.set(effectBody, dependencies);
 
-      cleanupFunctions.forEach(cleanupFunction => cleanupFunction());
+      if (cleanupFunctions.has(effectBody)) {
+        cleanupFunctions.get(effectBody)();
+      }
 
       const cleanupFunction = effect();
 
       if (typeof cleanupFunction === 'function') {
-        cleanupFunctions.push(cleanupFunction);
+        cleanupFunctions.set(effectBody, cleanupFunction);
       }
     }
   }

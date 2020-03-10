@@ -120,6 +120,12 @@ Hooks Support Status
 
 All other hooks (e.g. `useState()`, `useReducer()`) already work with shallow rendering.
 
+FAQ
+===
+Q: Does it call cleanup functions?
+
+A: Yes, it does, but only before calling the same effect again. It won't call cleanup functions when component gets unmounted. That's because, unfortunately, this library doesn't have access to the component life cycle. 
+
 
 Long Story
 ====
