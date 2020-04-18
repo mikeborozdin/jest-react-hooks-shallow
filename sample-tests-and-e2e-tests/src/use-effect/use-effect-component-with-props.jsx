@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { expensiveOperation1, expensiveOperation2, expensiveOperation3, expensiveOperation4 } from './expensiveOperations';
 
-export default function ComponentWithProps({ strProp, arrProp }) {
+const ComponentWithProps = ({ strProp, arrProp }) => {
     const [isClicked, setIsClicked] = useState(false);
 
     useEffect(() => {
@@ -22,3 +22,5 @@ export default function ComponentWithProps({ strProp, arrProp }) {
 
     return (<div><button onClick={() => setIsClicked(!isClicked)}>{isClicked ? "Clicked" : "Not Clicked"}</button></div>)
 }
+
+export default ComponentWithProps;
