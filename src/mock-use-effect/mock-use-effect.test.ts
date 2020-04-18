@@ -36,6 +36,35 @@ describe('mock-use-effect', () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
+  test('calls `effect` once if dependency is an unchanged ref type', () => {
+    const fn = jest.fn();
+
+    const dep = {foo: "Bar", baz: 0};
+
+    const useEffect = mockUseEffect();
+
+    useEffect(fn, [dep]);
+    useEffect(fn, [dep]);
+
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  test('calls `effect` again if ref type changes', () => {
+    const fn = jest.fn();
+
+    let dep = {foo: "Bar", baz: 0};
+
+    const useEffect = mockUseEffect();
+
+    useEffect(fn, [dep]);
+
+    dep = {foo: "Baz", baz: 0};
+
+    useEffect(fn, [dep]);
+
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
   test('calls `effect` again if dependencies change', () => {
     const fn = jest.fn();
 
