@@ -4,6 +4,7 @@ type CleanupFunction = () => void;
 
 const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies: unknown[]): boolean => {
   return previousDependencies === undefined ||
+      (currentDependencies && previousDependencies.length !== currentDependencies.length) ||
     previousDependencies.some((prevDep, index) => prevDep !== currentDependencies[index]);
 }
 
