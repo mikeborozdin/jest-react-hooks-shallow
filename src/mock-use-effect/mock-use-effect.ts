@@ -9,12 +9,10 @@ const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies:
 
 const mockUseEffect = (): UseEffectSignature => {
   const previousCalls = new Map<FunctionBody, unknown[]>();
-  // let cleanupFunctions: CleanupFunction[] = [];
   const cleanupFunctions = new Map<string, CleanupFunction>();
 
   beforeEach(() => {
     previousCalls.clear();
-    // cleanupFunctions = [];
     cleanupFunctions.clear();
   });
 

@@ -102,6 +102,60 @@ test('Calls `myAction()` on the first render and on clicking the button`', () =>
 });
 ```
 
+Usage with `mount()`
+====
+
+There have been a few issues reporting problems when using the library on the tests that rely on `mount()`.
+
+You don't need this library to trigger `useEffect()` and `useLayoutEffect()` when doing full rendering with `mount()`. However, you may have a mix of tests that rely both rely on `shallow()` and `mount()`. In those cases, you may run into issues with the tests that call `mount()`.
+
+Version `1.3.0` of this library provides a solution for that.
+
+If you have a test that uses `mount()` simply call `disableHooks()` before mounting a component:
+
+```js
+import { disableHooks } from 'jest-react-hooks-shallow';
+
+test('Full rendering with `mount()`', () => {
+  disableHooks();
+
+  const component = mount(<App />);
+  // your test code
+});
+```
+
+Now, that will disable hooks for the test in the same suite which rely on `shallow()`. So you need to re-enable them by calling `reenableHooks()`.
+
+```js
+import { disableHooks, reenableHooks } from 'jest-react-hooks-shallow';
+
+test('Full rendering with `mount()`', () => {
+  disableHooks();
+
+  const component = mount(<App />);
+  // your test code
+});
+
+test('Back to shallow rendering with', () => {
+  reenableHooks();
+
+  const component = shallow(<App />);
+  // your test code
+});
+```
+
+Examples
+----
+Please, see [use-effect-component.test.jsx](sample-tests-and-e2e-tests/src/use-effect/use-effect-component.test.jsx) for the examples of that. Namely, have a look at the test called `effects mockable when used with mount() and disableHooks()` and the one that comes after it.
+
+How does that work?
+----
+You enable `useEffect()`/`useLayoutEffect()` by calling `enableHooks()` in a file specified by `setupFilesAfterEnv` in the Jest configuration. The code in that code will be called before each test suite. 
+
+So if in our test suite you call `disableHooks()` it will not affect the other ones. But it will disable hooks in shallow rendering for the tests that come after the one with `disableHooks()`. So if any the tests defined after need shallow rendering and hooks, just call `reenableHooks()`.
+
+```
+
 Dependencies
 ====
 
