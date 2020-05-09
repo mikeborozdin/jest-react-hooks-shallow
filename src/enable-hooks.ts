@@ -65,8 +65,12 @@ const withoutHooks = (testFn: () => void): void => {
   }
 };
 
-
+/**
+ * @deprecated
+ */
 const disableHooks = (): void => {
+  console.warn('`disableHooks()` is deprecated. Please, use `withoutHooks()` instead');
+
   if (!originalUseEffect) {
     throw new Error('Cannot call `disableHooks()` if `enableHooks()` has not been invoked')
   }
@@ -76,6 +80,8 @@ const disableHooks = (): void => {
 };
 
 const reenableHooks = (): void => {
+  console.warn('`reenableHooks()` is deprecated.');
+
   useEffectMock.mockImplementation(mockUseEffect());
   useLayoutEffectMock.mockImplementation(mockUseEffect());
 };
