@@ -1,12 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import MaterialUiComponent from './material-ui-component';
-import { disableHooks } from 'jest-react-hooks-shallow';
 
 describe('MaterialUiComponent', () => {
-	it('Renders a component with Material-UI without errors', () => {
-    disableHooks();
-
+	test('Renders a component with Material-UI without errors', () => {
     expect(() => mount(<MaterialUiComponent />)).not.toThrow();
 	});
 });

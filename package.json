@@ -11,7 +11,9 @@
   "scripts": {
     "build": "tsc",
     "test:unit": "jest",
-    "test:e2e": "cd sample-tests-and-e2e-tests && npm i && npm test && cd ..",
+    "test:e2e:with-mocking-by-default": "cd samples-and-e2e-tests/with-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e:without-mocking-by-default": "cd samples-and-e2e-tests/without-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e": "npm run test:e2e:with-mocking-by-default && npm run test:e2e:without-mocking-by-default &",
     "test": "npm run test:unit && npm run test:e2e",
     "lint": "eslint ./src/**/*.ts"
   },

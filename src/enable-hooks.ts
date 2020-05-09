@@ -13,14 +13,22 @@ interface React {
 let originalUseEffect: (...args: unknown[]) => unknown;
 let originalUseLayoutEffect: (...args: unknown[]) => unknown;
 
-const useEffectMock = jest.fn().mockImplementation(mockUseEffect());
-const useLayoutEffectMock = jest.fn().mockImplementation(mockUseEffect());
+const useEffectMock = jest.fn();
+const useLayoutEffectMock = jest.fn();
 
-const enableHooks = (jestInstance: Jest): void => {
+const enableHooks = (jestInstance: Jest, dontMockByDefault = false): void => {
   const react = jestInstance.requireActual('react') as React;
 
   originalUseEffect = react.useEffect;
   originalUseLayoutEffect = react.useLayoutEffect;
+
+  if (dontMockByDefault) {
+    useEffectMock.mockImplementation(originalUseEffect);
+    useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+  } else {
+    useEffectMock.mockImplementation(mockUseEffect());
+    useLayoutEffectMock.mockImplementation(mockUseEffect());
+  }
 
   jestInstance.mock('react', () => ({
     ...react,
@@ -28,6 +36,35 @@ const enableHooks = (jestInstance: Jest): void => {
     useLayoutEffect: useLayoutEffectMock,
   }));
 };
+
+const withHooks = (testFn: () => void): void => {
+  useEffectMock.mockImplementation(mockUseEffect());
+  useLayoutEffectMock.mockImplementation(mockUseEffect());
+
+  try {
+    testFn();
+  } finally {
+    useEffectMock.mockImplementation(originalUseEffect);
+    useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+  }
+};
+
+const withoutHooks = (testFn: () => void): void => {
+  if (!originalUseEffect) {
+    throw new Error('Cannot call `disableHooks()` if `enableHooks()` has not been invoked')
+  }
+
+  useEffectMock.mockImplementation(originalUseEffect);
+  useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+
+  try {
+    testFn();
+  } finally {
+    useEffectMock.mockImplementation(mockUseEffect());
+    useLayoutEffectMock.mockImplementation(mockUseEffect());
+  }
+};
+
 
 const disableHooks = (): void => {
   if (!originalUseEffect) {
@@ -45,4 +82,4 @@ const reenableHooks = (): void => {
 
 export default enableHooks;
 
-export { disableHooks, reenableHooks };
+export { disableHooks, reenableHooks, withHooks, withoutHooks };
