@@ -1,6 +1,8 @@
 jest-react-hooks-shallow
 ====
 
+![Follow me on Twitter](https://img.shields.io/twitter/follow/mikeborozdin?style=social)
+
 Short Story
 ====
 
@@ -27,6 +29,8 @@ enableHooks(jest);
 ```
 
 And voilà - `useEffect()` and `useLayoutEffect()` will work with shallow rendering. From this moment on your test don't need to know anything about `useEffect()`. After all, it's a mere implementation detail.
+
+If you have a lot tests relying on `mount()`, please check [Usage with `mount()` section](#usage-with-mount).
 
 Testing
 ====
@@ -105,56 +109,73 @@ test('Calls `myAction()` on the first render and on clicking the button`', () =>
 Usage with `mount()`
 ====
 
-There have been a few issues reporting problems when using the library on the tests that rely on `mount()`.
+There have been a reported problems about using the library on tests that rely on `mount()`.
 
 You don't need this library to trigger `useEffect()` and `useLayoutEffect()` when doing full rendering with `mount()`. However, you may have a mix of tests that rely both rely on `shallow()` and `mount()`. In those cases, you may run into issues with the tests that call `mount()`.
 
-Version `1.3.0` of this library provides a solution for that.
+Version `1.4.0` of this library provides two solutions for that:
 
-If you have a test that uses `mount()` simply call `disableHooks()` before mounting a component:
+* Initialise the library with `enableHooks(jest, { dontMockByDefault: true })` and wrap tests for hook components relying on `shallow()` with `withHooks()`
+  * That's useful when you have a lot of tests with `mount()`
+* Wrap `mount()`-based tests for hooks components with `withoutHooks()`.
 
+Option #1 - `{ dontMockByDefault: true }`
+----
+
+That will disable effect hooks mocks by default. And you can wrap tests with that rely on `shallow()` and hooks with `withHooks()`, e.g.:
+
+**setupJest.js**
 ```js
-import { disableHooks } from 'jest-react-hooks-shallow';
+```js 
+import enableHooks from 'jest-react-hooks-shallow';
 
-test('Full rendering with `mount()`', () => {
-  disableHooks();
-
-  const component = mount(<App />);
-  // your test code
-});
+// pass an instance of jest to `enableHooks()`
+enableHooks(jest, { dontMockByDefault: true });
 ```
 
-Now, that will disable hooks for the test in the same suite which rely on `shallow()`. So you need to re-enable them by calling `reenableHooks()`.
-
+**App.test.js**
 ```js
-import { disableHooks, reenableHooks } from 'jest-react-hooks-shallow';
+import { withHooks } from 'jest-react-hooks-shallow';
 
-test('Full rendering with `mount()`', () => {
-  disableHooks();
+test('Shallow rendering of component with hooks', () => {
+  withHooks(() => {
 
-  const component = mount(<App />);
-  // your test code
+    const component = shallow(<App />);
+    // your test code
+  });
 });
 
-test('Back to shallow rendering with', () => {
-  reenableHooks();
+Option 21 - `withoutHook()`
 
-  const component = shallow(<App />);
-  // your test code
-});
-```
+Or you can enable hooks in shallow by default and surround tests using `mount()` with `withoutHooks()`, e.g.:
+
+ ```js
+  import { withoutHooks } from 'jest-react-hooks-shallow';
+
+  test('Full rendering of component with hooks', () => {
+    withoutHooks(() => {
+
+      const component = mount(<App />);
+      // your test code
+    });
+  });
+  ```
+
+`disableHooks()` and `reenableHooks()` are now deprecated
+----
+
+`disableHooks()` and `reenableHooks()` from version `1.3.0` are now marked deprecated. You can still use them, but it's not recommended.`.
+
 
 Examples
 ----
-Please, see [use-effect-component.test.jsx](sample-tests-and-e2e-tests/src/use-effect/use-effect-component.test.jsx) for the examples of that. Namely, have a look at the test called `effects mockable when used with mount() and disableHooks()` and the one that comes after it.
+Please, see two samples projects in the [samples-and-e2e-tests](samples-and-e2e-tests/) as an example.
 
 How does that work?
 ----
 You enable `useEffect()`/`useLayoutEffect()` by calling `enableHooks()` in a file specified by `setupFilesAfterEnv` in the Jest configuration. The code in that code will be called before each test suite. 
 
 So if in our test suite you call `disableHooks()` it will not affect the other ones. But it will disable hooks in shallow rendering for the tests that come after the one with `disableHooks()`. So if any the tests defined after need shallow rendering and hooks, just call `reenableHooks()`.
-
-```
 
 Dependencies
 ====
