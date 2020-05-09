@@ -2,7 +2,7 @@ import mockUseEffect from "./mock-use-effect/mock-use-effect";
 
 interface Jest {
   requireActual: (module: string) => object;
-  mock: (module: string, mock: object) => void;
+  mock: (module: string, factory?: () => unknown, options?: { virtual?: boolean }) => unknown;
 }
 
 interface React {
