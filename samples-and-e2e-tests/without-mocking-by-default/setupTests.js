@@ -4,4 +4,4 @@ import enableHooks from 'jest-react-hooks-shallow';
 
 configure({ adapter: new Adapter() });
 
-enableHooks(jest, true);
+enableHooks(jest, { dontMockByDefault: true });

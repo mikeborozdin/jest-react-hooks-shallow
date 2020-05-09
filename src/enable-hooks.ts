@@ -10,13 +10,17 @@ interface React {
   useLayoutEffect: (...args: unknown[]) => unknown;
 }
 
+interface EnableHooksOptions {
+  dontMockByDefault: boolean;
+}
+
 let originalUseEffect: (...args: unknown[]) => unknown;
 let originalUseLayoutEffect: (...args: unknown[]) => unknown;
 
 const useEffectMock = jest.fn();
 const useLayoutEffectMock = jest.fn();
 
-const enableHooks = (jestInstance: Jest, dontMockByDefault = false): void => {
+const enableHooks = (jestInstance: Jest, { dontMockByDefault }: EnableHooksOptions = { dontMockByDefault: false }): void => {
   const react = jestInstance.requireActual('react') as React;
 
   originalUseEffect = react.useEffect;
