@@ -1,9 +1,7 @@
 jest-react-hooks-shallow
 ====
 
-<iframe 
-allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/follow_button.html?screen_name=mikeborozdin"  style="width:300px; height:20px;">
-</iframe>
+![Follow me on Twitter](https://img.shields.io/twitter/follow/mikeborozdin?style=social)
 
 Short Story
 ====
