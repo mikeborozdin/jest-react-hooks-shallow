@@ -154,8 +154,6 @@ You enable `useEffect()`/`useLayoutEffect()` by calling `enableHooks()` in a fil
 
 So if in our test suite you call `disableHooks()` it will not affect the other ones. But it will disable hooks in shallow rendering for the tests that come after the one with `disableHooks()`. So if any the tests defined after need shallow rendering and hooks, just call `reenableHooks()`.
 
-```
-
 Dependencies
 ====
 
