@@ -125,7 +125,6 @@ Option #1 - `{ dontMockByDefault: true }`
 That will disable effect hooks mocks by default. And you can wrap tests with that rely on `shallow()` and hooks with `withHooks()`, e.g.:
 
 **setupJest.js**
-```js
 ```js 
 import enableHooks from 'jest-react-hooks-shallow';
 
@@ -144,8 +143,10 @@ test('Shallow rendering of component with hooks', () => {
     // your test code
   });
 });
+```
 
-Option 21 - `withoutHook()`
+Option #2 - `withoutHook()`
+----
 
 Or you can enable hooks in shallow by default and surround tests using `mount()` with `withoutHooks()`, e.g.:
 
