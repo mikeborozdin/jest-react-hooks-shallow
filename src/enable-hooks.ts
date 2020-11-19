@@ -26,13 +26,15 @@ const enableHooks = (jestInstance: Jest, { dontMockByDefault }: EnableHooksOptio
   originalUseEffect = react.useEffect;
   originalUseLayoutEffect = react.useLayoutEffect;
 
-  if (dontMockByDefault) {
-    useEffectMock.mockImplementation(originalUseEffect);
-    useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
-  } else {
-    useEffectMock.mockImplementation(mockUseEffect());
-    useLayoutEffectMock.mockImplementation(mockUseEffect());
-  }
+  beforeEach(() => {
+    if (dontMockByDefault) {
+      useEffectMock.mockImplementation(originalUseEffect);
+      useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+    } else {
+      useEffectMock.mockImplementation(mockUseEffect());
+      useLayoutEffectMock.mockImplementation(mockUseEffect());
+    }
+  })
 
   jestInstance.mock('react', () => ({
     ...react,
