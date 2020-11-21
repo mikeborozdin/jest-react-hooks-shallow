@@ -58,7 +58,6 @@ const tests = (Component) => {
 describe('useEffect', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.resetAllMocks();
   });
   
   tests(UseEffectComponent);
