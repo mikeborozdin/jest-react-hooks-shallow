@@ -7,14 +7,16 @@ const noDepsOrDifferent = (previousDependencies: unknown[], currentDependencies:
     previousDependencies.some((prevDep, index) => prevDep !== currentDependencies[index]);
 }
 
-const mockUseEffect = (): UseEffectSignature => {
+const mockUseEffect = (withoutBeforeEach = false): UseEffectSignature => {
   const previousCalls = new Map<FunctionBody, unknown[]>();
   const cleanupFunctions = new Map<string, CleanupFunction>();
 
-  beforeEach(() => {
-    previousCalls.clear();
-    cleanupFunctions.clear();
-  });
+  if (!withoutBeforeEach) {
+    beforeEach(() => {
+      previousCalls.clear();
+      cleanupFunctions.clear();
+    });
+  }
 
   return (effect: () => CleanupFunction | void, dependencies?: unknown[]): void => {
     const effectBody = effect.toString();
