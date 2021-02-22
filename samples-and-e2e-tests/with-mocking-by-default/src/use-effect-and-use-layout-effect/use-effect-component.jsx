@@ -7,7 +7,6 @@ const UseEffectComponent = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
-    console.log('!!!useEffect');
     setText(`Button pressed: ${buttonClicked.toString()}`);
 
     callback();
