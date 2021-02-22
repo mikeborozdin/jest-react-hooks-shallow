@@ -18,56 +18,55 @@ const tests = (Component) => {
     expect(component.text()).toContain('true');
   });
 
-  // test('effect is mockable', () => {
-  //   const component = shallow(<Component />);
+  test('effect is mockable', () => {
+    const component = shallow(<Component />);
 
-  //   expect(component.text()).toContain('false');
+    expect(component.text()).toContain('false');
 
-  //   expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 
-  //   component.find('button').simulate('click');
+    component.find('button').simulate('click');
 
-  //   expect(callback).toHaveBeenCalledTimes(2);
-  // });
+    expect(callback).toHaveBeenCalledTimes(2);
+  });
 
-  // test('effects mockable when used with mount() and withoutHooks', () => {
-  //   withoutHooks(() => {
-  //     const component = mount(<Component />);
+  test('effects mockable when used with mount() and withoutHooks', () => {
+    withoutHooks(() => {
+      const component = mount(<Component />);
 
-  //     expect(component.text()).toContain('false');
+      expect(component.text()).toContain('false');
 
-  //     expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback).toHaveBeenCalledTimes(1);
 
-  //     component.find('button').simulate('click');
+      component.find('button').simulate('click');
 
-  //     expect(callback).toHaveBeenCalledTimes(2);
-  //   });
-  // });
+      expect(callback).toHaveBeenCalledTimes(2);
+    });
+  });
 
-  // test('cleanup function', () => {
-  //   expect(cleanup).toHaveBeenCalledTimes(0);
+  test('cleanup function', () => {
+    expect(cleanup).toHaveBeenCalledTimes(0);
 
-  //   const component = shallow(<Component />);
+    const component = shallow(<Component />);
 
-  //   component.find('button').simulate('click');
+    component.find('button').simulate('click');
 
-  //   expect(cleanup).toHaveBeenCalledTimes(1);
-  // });
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  });
 }
 
 describe('useEffect', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.resetAllMocks();
   });
   
   tests(UseEffectComponent);
 });
 
-// describe('useLayoutEffect', () => {
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe('useLayoutEffect', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   
-//   tests(UseLayoutEffectComponent);
-// });
+  tests(UseLayoutEffectComponent);
+});
