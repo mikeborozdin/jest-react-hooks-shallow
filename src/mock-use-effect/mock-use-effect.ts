@@ -11,11 +11,6 @@ const mockUseEffect = (): UseEffectSignature => {
   const previousCalls = new Map<FunctionBody, unknown[]>();
   const cleanupFunctions = new Map<string, CleanupFunction>();
 
-  beforeEach(() => {
-    previousCalls.clear();
-    cleanupFunctions.clear();
-  });
-
   return (effect: () => CleanupFunction | void, dependencies?: unknown[]): void => {
     const effectBody = effect.toString();
 

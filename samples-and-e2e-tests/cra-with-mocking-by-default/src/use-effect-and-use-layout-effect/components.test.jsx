@@ -63,10 +63,10 @@ describe('useEffect', () => {
   tests(UseEffectComponent);
 });
 
-describe('useLayoutEffect', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+// describe('useLayoutEffect', () => {
+//   beforeEach(() => {
+//     jest.clearAllMocks();
+//   });
   
-  tests(UseLayoutEffectComponent);
-});
+//   tests(UseLayoutEffectComponent);
+// });

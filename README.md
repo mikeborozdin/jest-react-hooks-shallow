@@ -1,8 +1,5 @@
 jest-react-hooks-shallow
 ====
-
-[![Follow me on Twitter](https://img.shields.io/twitter/follow/mikeborozdin?style=social)](https://twitter.com/mikeborozdin)
-
 Short Story
 ====
 
