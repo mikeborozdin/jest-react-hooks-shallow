@@ -11,10 +11,11 @@
   "scripts": {
     "build": "tsc",
     "test:unit": "jest",
-    "test:e2e:with-mocking-by-default": "cd samples-and-e2e-tests/with-mocking-by-default && rm -rf node_modules && npm i && npm test && cd ../..",
-    "test:e2e:without-mocking-by-default": "cd samples-and-e2e-tests/without-mocking-by-default && rm -rf node_modules  && npm i && npm test && cd ../..",
-    "test:e2e:cra-without-mocking-by-default": "cd samples-and-e2e-tests/cra-without-mocking-by-default && rm -rf node_modules  && npm i && npm test && cd ../..",
-    "test:e2e": "npm run test:e2e:with-mocking-by-default && npm run test:e2e:without-mocking-by-default",
+    "test:e2e:with-mocking-by-default": "cd samples-and-e2e-tests/with-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e:without-mocking-by-default": "cd samples-and-e2e-tests/without-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e:cra-with-mocking-by-default": "cd samples-and-e2e-tests/cra-with-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e:cra-without-mocking-by-default": "cd samples-and-e2e-tests/cra-without-mocking-by-default && npm i && npm test && cd ../..",
+    "test:e2e": "npm run test:e2e:with-mocking-by-default && npm run test:e2e:with-mocking-by-default && npm run test:e2e:without-mocking-by-default",
     "test": "npm run test:unit && npm run test:e2e",
     "lint": "eslint ./src/**/*.ts"
   },
