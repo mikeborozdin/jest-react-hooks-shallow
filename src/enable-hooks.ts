@@ -31,8 +31,8 @@ const enableHooks = (jestInstance: Jest, { dontMockByDefault }: EnableHooksOptio
       useEffectMock.mockImplementation(originalUseEffect);
       useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
     } else {
-    useEffectMock.mockImplementation(mockUseEffect());
-    useLayoutEffectMock.mockImplementation(mockUseEffect());
+      useEffectMock.mockImplementation(mockUseEffect());
+      useLayoutEffectMock.mockImplementation(mockUseEffect());
     }
   });
 
@@ -44,8 +44,8 @@ const enableHooks = (jestInstance: Jest, { dontMockByDefault }: EnableHooksOptio
 };
 
 const withHooks = (testFn: () => void): void => {
-  useEffectMock.mockImplementation(mockUseEffect(true));
-  useLayoutEffectMock.mockImplementation(mockUseEffect(true));
+  useEffectMock.mockImplementation(mockUseEffect());
+  useLayoutEffectMock.mockImplementation(mockUseEffect());
 
   try {
     testFn();
