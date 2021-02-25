@@ -197,7 +197,20 @@ FAQ
 ===
 Q: Does it call cleanup functions?
 
-A: Yes, it does, but only before calling the same effect again. It won't call cleanup functions when component gets unmounted. That's because, unfortunately, this library doesn't have access to the component life cycle. 
+A: Yes, it does, but only before calling the same effect again. It won't call cleanup functions when component gets unmounted. That's because, unfortunately, this library doesn't have access to the component life cycle.
+
+
+Q: I'm getting a `beforeEach is not defined` error after adding the lines to my Jest setup file.
+
+A: There's a quick fix for this.  We want to pass an instance of Jest to `enableHooks` AFTER the environment is set up.  So move `enableHooks(jest);` into a separate file in the same folder as your Jest setup file (ex. `enableHooks.js`) and call it in your Jest setup file like this:
+
+```
+module.exports = {
+  ...
+  setupFilesAfterEnv: ['./enableHooks.js'],
+  ...
+}
+```
 
 
 Long Story
