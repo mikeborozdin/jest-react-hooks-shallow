@@ -4,10 +4,10 @@ import UseEffectComponent from './use-effect-component';
 import UseLayoutEffectComponent from './use-layout-effect-component';
 import callback from './callback';
 import cleanup from './cleanup';
-import { withHooks } from 'jest-react-hooks-shallow';
+import { withHooks } from 'vitest-react-hooks-shallow';
 
-jest.mock('./callback', () => jest.fn());
-jest.mock('./cleanup', () => jest.fn())
+vi.mock('./callback', () => ({ default: vi.fn() }));
+vi.mock('./cleanup', () => ({ default: vi.fn() }));
 
 const tests = (Component) => {
   test('effect is not called when not using withHooks', () => {
@@ -17,8 +17,8 @@ const tests = (Component) => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  test('effect is called on first render and then on a button press', () => {
-    withHooks(() => {
+  test('effect is called on first render and then on a button press', async () => {
+    await withHooks(() => {
       const component = shallow(<Component />);
 
       expect(component.text()).toContain('false');
@@ -27,8 +27,8 @@ const tests = (Component) => {
     });
   });
 
-  test('effect is mockable', () => {
-    withHooks(() => {
+  test('effect is mockable', async () => {
+    await withHooks(() => {
       const component = shallow(<Component />);
 
       expect(component.text()).toContain('false');
@@ -54,8 +54,8 @@ const tests = (Component) => {
 
   });
 
-  test('cleanup function', () => {
-    withHooks(() => {
+  test('cleanup function', async () => {
+    await withHooks(() => {
       expect(cleanup).toHaveBeenCalledTimes(0);
 
       const component = shallow(<Component />);
@@ -69,7 +69,7 @@ const tests = (Component) => {
 
 describe('useEffect', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   
   tests(UseEffectComponent);
@@ -77,7 +77,7 @@ describe('useEffect', () => {
 
 describe('useLayoutEffect', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   
   tests(UseLayoutEffectComponent);

@@ -4,10 +4,11 @@ import UseEffectComponent from './use-effect-component';
 import UseLayoutEffectComponent from './use-layout-effect-component';
 import callback from './callback';
 import cleanup from './cleanup';
-import { withoutHooks } from 'jest-react-hooks-shallow';
+import { withoutHooks } from 'vitest-react-hooks-shallow';
+import { vi, test, describe, beforeEach, expect } from 'vitest';
 
-jest.mock('./callback', () => jest.fn());
-jest.mock('./cleanup', () => jest.fn())
+vi.mock('./callback', () => ({ default: vi.fn() }));
+vi.mock('./cleanup', () => ({ default: vi.fn() }));
 
 const tests = (Component) => {
   test('effect is called on first render and then on a button press', () => {
@@ -30,8 +31,8 @@ const tests = (Component) => {
     expect(callback).toHaveBeenCalledTimes(2);
   });
 
-  test('effects mockable when used with mount() and withoutHooks', () => {
-    withoutHooks(() => {
+  test('effects mockable when used with mount() and withoutHooks', async () => {
+    await withoutHooks(() => {
       const component = mount(<Component />);
 
       expect(component.text()).toContain('false');
@@ -57,7 +58,7 @@ const tests = (Component) => {
 
 describe('useEffect', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   
   tests(UseEffectComponent);
@@ -65,7 +66,7 @@ describe('useEffect', () => {
 
 describe('useLayoutEffect', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   
   tests(UseLayoutEffectComponent);

@@ -1,8 +1,9 @@
 import mockUseEffect from './mock-use-effect';
+import { vi, describe, test, expect } from 'vitest';
 
 describe('mock-use-effect', () => {
   test('calls `effect` multiple times if no dependencies', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     const useEffect = mockUseEffect();
 
@@ -13,7 +14,7 @@ describe('mock-use-effect', () => {
   });
 
   test('calls `effect` once if dependencies do not change', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     const useEffect = mockUseEffect();
 
@@ -26,7 +27,7 @@ describe('mock-use-effect', () => {
   });
 
   test('calls `effect` once if dependencies are an empty array', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     const useEffect = mockUseEffect();
 
@@ -37,7 +38,7 @@ describe('mock-use-effect', () => {
   });
 
   test('calls `effect` again if dependencies change', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     const useEffect = mockUseEffect();
 
@@ -76,7 +77,7 @@ describe('mock-use-effect', () => {
   test('calls cleanup function before another calling the same effect again function', () => {
     const useEffect = mockUseEffect();
 
-    const cleanupFn = jest.fn();
+    const cleanupFn = vi.fn();
 
     useEffect(() => cleanupFn);
     useEffect(() => cleanupFn);
@@ -87,7 +88,7 @@ describe('mock-use-effect', () => {
   test('does not call cleanup function if no other `useEffect()` function is called', () => {
     const useEffect = mockUseEffect();
 
-    const cleanupFn = jest.fn();
+    const cleanupFn = vi.fn();
 
     useEffect(() => cleanupFn);
 
@@ -97,10 +98,10 @@ describe('mock-use-effect', () => {
   test('does not call cleanup function before calling another effect', () => {
     const useEffect = mockUseEffect();
 
-    const cleanupFn = jest.fn();
+    const cleanupFn = vi.fn();
 
-    const firstEffect = (): Function => cleanupFn;
-    const secondEffect = (): void => { jest.fn() };
+    const firstEffect = () => cleanupFn;
+    const secondEffect = () => { vi.fn() };
 
     useEffect(firstEffect);
     useEffect(secondEffect);

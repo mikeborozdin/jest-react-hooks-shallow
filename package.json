@@ -1,25 +1,27 @@
 {
-  "name": "jest-react-hooks-shallow",
+  "name": "vitest-react-hooks-shallow",
   "version": "1.5.1",
   "description": "React Hooks for shallow rendering",
-  "homepage": "https://github.com/mikeborozdin/jest-react-hooks-shallow",
+  "homepage": "https://github.com/ecmarsh/vitest-react-hooks-shallow",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikeborozdin/jest-react-hooks-shallow"
+    "url": "https://github.com/ecmarsh/vitest-react-hooks-shallow"
   },
   "main": "lib/enable-hooks.js",
+  "module": "lib/enable-hooks.js",
   "scripts": {
     "build": "tsc",
-    "test:unit": "jest",
+    "test:unit": "vitest run",
     "test:e2e:with-mocking-by-default": "cd samples-and-e2e-tests/with-mocking-by-default && npm i && npm test && cd ../..",
     "test:e2e:without-mocking-by-default": "cd samples-and-e2e-tests/without-mocking-by-default && npm i && npm test && cd ../..",
-    "test:e2e:cra-with-mocking-by-default": "cd samples-and-e2e-tests/cra-with-mocking-by-default && npm i && npm test && cd ../..",
-    "test:e2e:cra-without-mocking-by-default": "cd samples-and-e2e-tests/cra-without-mocking-by-default && npm i && npm test && cd ../..",
-    "test:e2e": "npm run test:e2e:with-mocking-by-default && npm run test:e2e:with-mocking-by-default && npm run test:e2e:without-mocking-by-default",
+    "test:e2e": "npm run test:e2e:with-mocking-by-default && npm run test:e2e:without-mocking-by-default",
     "test": "npm run test:unit && npm run test:e2e",
     "lint": "eslint ./src/**/*.ts"
   },
-  "author": "Mike Borozdin <mike.borozdin@gmail.com>",
+  "contributors": [
+    "Ethan Marsh <marsheth@amazon.com>",
+    "Mike Borozdin <mike.borozdin@gmail.com>"
+  ],
   "license": "ISC",
   "keywords": [
     "react",
@@ -29,16 +31,15 @@
     "testing",
     "enzyme",
     "mock",
-    "jest"
+    "vitest"
   ],
   "devDependencies": {
-    "@types/jest": "^25.1.3",
-    "@typescript-eslint/eslint-plugin": "^2.22.0",
-    "@typescript-eslint/parser": "^2.22.0",
-    "eslint": "^6.8.0",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3"
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "~4.2.1",
+    "eslint": "^8.56.0",
+    "vitest": "~1.2.2",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "react": "^16.8.0"

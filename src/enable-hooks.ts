@@ -1,9 +1,5 @@
 import mockUseEffect from "./mock-use-effect/mock-use-effect";
-
-interface Jest {
-  requireActual: (module: string) => object;
-  mock: (module: string, factory?: () => unknown, options?: { virtual?: boolean }) => unknown;
-}
+import { vi, beforeEach, type VitestUtils } from 'vitest';
 
 interface React {
   useEffect: (...args: unknown[]) => unknown;
@@ -14,84 +10,74 @@ interface EnableHooksOptions {
   dontMockByDefault: boolean;
 }
 
+const mocksPromise = vi.hoisted(async () => {
+  const react = await vi.importActual<React>('react');
+  return {
+    useEffect: vi.fn().mockImplementation(react.useEffect),
+    useLayoutEffect: vi.fn().mockImplementation(react.useLayoutEffect),
+  };
+});
+
+vi.mock('react', async (importOriginal) => {
+  const [mocks, originalReact] = await Promise.all([
+    mocksPromise,
+    importOriginal<React>(),
+  ]);
+  return {
+    ...originalReact,
+    useEffect: mocks.useEffect,
+    useLayoutEffect: mocks.useLayoutEffect,
+  };
+});
+
+
 let originalUseEffect: (...args: unknown[]) => unknown;
 let originalUseLayoutEffect: (...args: unknown[]) => unknown;
 
-const useEffectMock = jest.fn();
-const useLayoutEffectMock = jest.fn();
-
-const enableHooks = (jestInstance: Jest, { dontMockByDefault }: EnableHooksOptions = { dontMockByDefault: false }): void => {
-  const react = jestInstance.requireActual('react') as React;
-
+const enableHooks = async (viInstance: VitestUtils, { dontMockByDefault }: EnableHooksOptions = { dontMockByDefault: false }) => {
+  const react = await viInstance.importActual('react') as React;
   originalUseEffect = react.useEffect;
   originalUseLayoutEffect = react.useLayoutEffect;
 
-  beforeEach(() => {
-    if (dontMockByDefault) {
-      useEffectMock.mockImplementation(originalUseEffect);
-      useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
-    } else {
-      useEffectMock.mockImplementation(mockUseEffect());
-      useLayoutEffectMock.mockImplementation(mockUseEffect());
+  beforeEach(async () => {
+    const mocks = await mocksPromise;
+    if (!dontMockByDefault) {
+      mocks.useEffect.mockImplementation(mockUseEffect());
+      mocks.useLayoutEffect.mockImplementation(mockUseEffect());
     }
   });
-
-  jestInstance.mock('react', () => ({
-    ...react,
-    useEffect: useEffectMock,
-    useLayoutEffect: useLayoutEffectMock,
-  }));
 };
 
-const withHooks = (testFn: () => void): void => {
-  useEffectMock.mockImplementation(mockUseEffect());
-  useLayoutEffectMock.mockImplementation(mockUseEffect());
+const withHooks = async (testFn: () => void) => {
+  const mocks = await mocksPromise;
+  mocks.useEffect.mockImplementation(mockUseEffect());
+  mocks.useLayoutEffect.mockImplementation(mockUseEffect());
 
   try {
     testFn();
   } finally {
-    useEffectMock.mockImplementation(originalUseEffect);
-    useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+    mocks.useEffect.mockImplementation(originalUseEffect);
+    mocks.useLayoutEffect.mockImplementation(originalUseLayoutEffect);
   }
 };
 
-const withoutHooks = (testFn: () => void): void => {
+const withoutHooks = async (testFn: () => void) => {
   if (!originalUseEffect) {
     throw new Error('Cannot call `disableHooks()` if `enableHooks()` has not been invoked')
   }
 
-  useEffectMock.mockImplementation(originalUseEffect);
-  useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
+  const mocks = await mocksPromise;
+  mocks.useEffect.mockImplementation(originalUseEffect);
+  mocks.useEffect.mockImplementation(originalUseLayoutEffect);
 
   try {
     testFn();
   } finally {
-    useEffectMock.mockImplementation(mockUseEffect());
-    useLayoutEffectMock.mockImplementation(mockUseEffect());
+    mocks.useEffect.mockImplementation(mockUseEffect());
+    mocks.useEffect.mockImplementation(mockUseEffect());
   }
-};
-
-/**
- * @deprecated
- */
-const disableHooks = (): void => {
-  console.warn('`disableHooks()` is deprecated. Please, use `withoutHooks()` instead');
-
-  if (!originalUseEffect) {
-    throw new Error('Cannot call `disableHooks()` if `enableHooks()` has not been invoked')
-  }
-
-  useEffectMock.mockImplementation(originalUseEffect);
-  useLayoutEffectMock.mockImplementation(originalUseLayoutEffect);
-};
-
-const reenableHooks = (): void => {
-  console.warn('`reenableHooks()` is deprecated.');
-
-  useEffectMock.mockImplementation(mockUseEffect());
-  useLayoutEffectMock.mockImplementation(mockUseEffect());
 };
 
 export default enableHooks;
 
-export { disableHooks, reenableHooks, withHooks, withoutHooks };
+export { withHooks, withoutHooks };
