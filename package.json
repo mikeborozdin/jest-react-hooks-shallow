@@ -1,6 +1,6 @@
 {
   "name": "vitest-react-hooks-shallow",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "React Hooks for shallow rendering",
   "homepage": "https://github.com/ecmarsh/vitest-react-hooks-shallow",
   "repository": {

@@ -22,10 +22,10 @@ yarn add --dev vitest-react-hooks-shallow
 
 ```js
 import enableHooks from 'vitest-react-hooks-shallow';
-import { vi } from 'vitest';
+import { vi } from 'vitest'; // or use globals
 
-// pass the global instance of vi to `enableHooks()`
-enableHooks(vi);
+// pass the vi instance vi to `enableHooks()`
+await enableHooks(vi);
 ```
 
 And voilà - `useEffect()` and `useLayoutEffect()` will work with shallow rendering. From this moment on your test don't need to know anything about `useEffect()`. After all, it's a mere implementation detail.

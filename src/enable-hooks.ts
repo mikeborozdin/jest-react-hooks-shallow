@@ -4,6 +4,10 @@ import { vi, beforeEach, type VitestUtils } from 'vitest';
 interface React {
   useEffect: (...args: unknown[]) => unknown;
   useLayoutEffect: (...args: unknown[]) => unknown;
+  default: {
+    useEffect: (...args: unknown[]) => unknown;
+    useLayoutEffect: (...args: unknown[]) => unknown;
+  }
 }
 
 interface EnableHooksOptions {
@@ -27,6 +31,11 @@ vi.mock('react', async (importOriginal) => {
     ...originalReact,
     useEffect: mocks.useEffect,
     useLayoutEffect: mocks.useLayoutEffect,
+    default: {
+      ...originalReact.default,
+      useEffect: mocks.useEffect,
+      useLayoutEffect: mocks.useLayoutEffect,
+    }
   };
 });
 
@@ -48,20 +57,20 @@ const enableHooks = async (viInstance: VitestUtils, { dontMockByDefault }: Enabl
   });
 };
 
-const withHooks = async (testFn: () => void) => {
+const withHooks = async (testFn: () => void | Promise<void>) => {
   const mocks = await mocksPromise;
   mocks.useEffect.mockImplementation(mockUseEffect());
   mocks.useLayoutEffect.mockImplementation(mockUseEffect());
 
   try {
-    testFn();
+    await testFn();
   } finally {
     mocks.useEffect.mockImplementation(originalUseEffect);
     mocks.useLayoutEffect.mockImplementation(originalUseLayoutEffect);
   }
 };
 
-const withoutHooks = async (testFn: () => void) => {
+const withoutHooks = async (testFn: () => void | Promise<void>) => {
   if (!originalUseEffect) {
     throw new Error('Cannot call `disableHooks()` if `enableHooks()` has not been invoked')
   }
@@ -71,7 +80,7 @@ const withoutHooks = async (testFn: () => void) => {
   mocks.useEffect.mockImplementation(originalUseLayoutEffect);
 
   try {
-    testFn();
+    await testFn();
   } finally {
     mocks.useEffect.mockImplementation(mockUseEffect());
     mocks.useEffect.mockImplementation(mockUseEffect());
